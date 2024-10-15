@@ -82,6 +82,9 @@ if (config.toc.template){
   pmd.validatePathRef(config.toc.template, 'config.toc.template');
 }
 
+// Determine date the documentation was generated
+let date = new Date();
+config.generatedDate = date.toISOString().split('T')[0];
 
 // Process data and write to file
 var objs = pmd.generateData(config);
