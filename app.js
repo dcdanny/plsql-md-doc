@@ -49,6 +49,14 @@ if (!Array.isArray(config.folders)){
 config.folders.forEach(function(folder, key){
   folder = extend(true, {}, defaultConfigFolder, folder);
 
+  //Set up layout template location from config
+  if(folder.layoutTemplate != "") {
+    pmd.validatePathRef(folder.layoutTemplate, 'layoutTemplate');
+  } else{
+    folder.layoutTemplate = __dirname + "/templates/partials/layout.hbs"
+  }
+  Handlebars.registerPartial('layout', fs.readFileSync(folder.layoutTemplate, 'utf8'));
+
   // Convert the regexp into a regexp object
   if (folder.source.fileFilterRegexp.length > 0){
     folder.source.fileFilterRegexp = new RegExp(folder.source.fileFilterRegexp, 'i');
@@ -82,6 +90,9 @@ if (config.toc.template){
   pmd.validatePathRef(config.toc.template, 'config.toc.template');
 }
 
+// Determine date the documentation was generated
+let date = new Date();
+config.generatedDate = date.toISOString().split('T')[0];
 
 // Process data and write to file
 var objs = pmd.generateData(config);
@@ -90,3 +101,27 @@ objs = pmd.mergeObjs(objs);
 // First generate the TOC than the files, so the packages also have a TOC
 pmd.generateToc(config, objs);
 pmd.saveToFile(config, objs);
+
+// Copy template resources into output folder
+let cpOptions = { errorOnExist: false, force: false, recursive: true};
+fs.cpSync(
+  path.resolve(__dirname + "/templates/resources"),
+  path.resolve(config.folders[0].output.path,"resources"),
+  cpOptions,
+  function (err) {
+    if (err) return console.error(err)
+    debug.log("Success: Copied Template resources to output")
+});
+
+//Copy any resources in source folder to output folder
+let sourcePath = path.resolve(config.folders[0].source.path + "resources")
+if(fs.existsSync(sourcePath)){
+  fs.cpSync(
+    sourcePath,
+    path.resolve(config.folders[0].output.path,"resources"),
+    cpOptions,
+    function (err) {
+    if (err) return console.error(err)
+      debug.log("Success: Copied Template resources to output")
+  });
+}
