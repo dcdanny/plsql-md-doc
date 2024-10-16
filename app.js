@@ -101,3 +101,27 @@ objs = pmd.mergeObjs(objs);
 // First generate the TOC than the files, so the packages also have a TOC
 pmd.generateToc(config, objs);
 pmd.saveToFile(config, objs);
+
+// Copy template resources into output folder
+let cpOptions = { errorOnExist: false, force: false, recursive: true};
+fs.cpSync(
+  path.resolve(__dirname + "/templates/resources"),
+  path.resolve(config.folders[0].output.path,"resources"),
+  cpOptions,
+  function (err) {
+    if (err) return console.error(err)
+    debug.log("Success: Copied Template resources to output")
+});
+
+//Copy any resources in source folder to output folder
+let sourcePath = path.resolve(config.folders[0].source.path + "resources")
+if(fs.existsSync(sourcePath)){
+  fs.cpSync(
+    sourcePath,
+    path.resolve(config.folders[0].output.path,"resources"),
+    cpOptions,
+    function (err) {
+    if (err) return console.error(err)
+      debug.log("Success: Copied Template resources to output")
+  });
+}
