@@ -34,6 +34,7 @@ Parameter | Required | Description
 `<projectName>` | required | Unique name of the project.
 `<projectName>.debug` | optional | Default: `false`. Run app in debug mode.
 `<projectName>.folders` | required | single JSON object array of objects. Use the an array if the project has multiple folders to process.
+`<projectName>.layoutTemplate` | optional | the HTML layout template to use. If not present built in layout file will be used
 `<projectName>.folders.output` | required | JSON object for output information
 `<projectName>.folders.output.delete` | optional | Boolean to delete contents in folder. Default `false`.
 `<projectName>.folders.output.path` | required | Path to folder where `.md` files will reside.

@@ -1,4 +1,5 @@
 {
+  "layoutTemplate": "",
   "output" : {
     "delete" : false,
     "path" : ""

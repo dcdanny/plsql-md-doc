@@ -49,6 +49,14 @@ if (!Array.isArray(config.folders)){
 config.folders.forEach(function(folder, key){
   folder = extend(true, {}, defaultConfigFolder, folder);
 
+  //Set up layout template location from config
+  if(folder.layoutTemplate != "") {
+    pmd.validatePathRef(folder.layoutTemplate, 'layoutTemplate');
+  } else{
+    folder.layoutTemplate = __dirname + "/templates/partials/layout.hbs"
+  }
+  Handlebars.registerPartial('layout', fs.readFileSync(folder.layoutTemplate, 'utf8'));
+
   // Convert the regexp into a regexp object
   if (folder.source.fileFilterRegexp.length > 0){
     folder.source.fileFilterRegexp = new RegExp(folder.source.fileFilterRegexp, 'i');

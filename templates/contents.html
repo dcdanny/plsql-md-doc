@@ -1,0 +1,19 @@
+{{#> layout }}
+
+        <!-- Index Menu -->
+        <div class="small-12 large-3 columns">
+            <nav class="sticky">
+                <h3>Files</h3>
+                <ul class="menu vertical">
+                    {{#each files}}
+                    <li class="{{#ifCond name '==' @root.name}}active{{/ifCond}}"><a href="{{docFileName}}">{{toUpperCase name}}</a></li>
+                    {{/each}}
+                </ul>
+            </nav>
+        </div>
+        <!-- /Index Menu -->
+
+        <!-- Main -->
+        <div class="small-12 large-9 columns"></div>
+        <!-- /Main -->
+{{/layout}}
